@@ -26,7 +26,7 @@ class TodoAPIRootView(APIView):
         return Response({
             "todocategory-create":reverse("todo:todo_createview",request=request,format=format),
             "todocategory-list":reverse("todo:todocategory-listview",request=request,format=format),
-             "todo-list":reverse("todo:todolist_view",request=request,format=format),
+             "todo-list":reverse("todo:todo-list_view",request=request,format=format),
         })
 
 
