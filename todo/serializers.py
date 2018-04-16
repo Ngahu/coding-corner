@@ -30,3 +30,14 @@ class TodoCategoryCreateSerializer(ModelSerializer):
     #     return TodoCategory.objects.create(**validated_data)
 
 
+class TodoListSerialzer(ModelSerializer):
+    class Meta:
+        model = Todo
+        fields= (
+            'todo_list',
+            'title',
+            'text',
+            'priority',
+            'completed',
+            'timestamp'
+        )
