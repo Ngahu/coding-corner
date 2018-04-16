@@ -5,10 +5,10 @@ User = settings.AUTH_USER_MODEL
 from django.db.models.signals import pre_save,post_save
 from  .utils import unique_slug_generator
 
-import datetime
 
 
-class List(models.Model):
+
+class TodoCategory(models.Model):
     """
     will hold a single todo list
     """
@@ -17,7 +17,6 @@ class List(models.Model):
     slug = models.SlugField(unique=True,blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
-    created_at = models.DateTimeField(default=datetime.datetime.now)
 
 
     def __str__(self):
@@ -29,12 +28,12 @@ class List(models.Model):
          ordering = ['title'] 
 
 
-def list_pre_save_receiver(sender,instance,*args,**kwargs):
+def todo_category_pre_save_receiver(sender,instance,*args,**kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
 
-pre_save.connect(list_pre_save_receiver,sender=List)
+pre_save.connect(todo_category_pre_save_receiver,sender=TodoCategory)
 
 
 
@@ -52,12 +51,12 @@ class Todo(models.Model):
     eg  finish device registration
     """
     owner = models.ForeignKey(User)
-    todo_list = models.ForeignKey(List)
+    todo_list = models.ForeignKey(TodoCategory)
     title = models.CharField(max_length=250) 
     text = models.TextField()
     priority = models.IntegerField(choices=PRIORITY_CHOICES, default=1) 
     completed = models.BooleanField(default=False) 
-    created_at = models.DateTimeField(default=datetime.datetime.now) 
+    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
     slug = models.SlugField(unique=True,blank=True, null=True)
 
 
