@@ -1,22 +1,34 @@
 import random
 import string
 
+from django.utils.text import slugify
 
-def shortcode_generator(size=7,chars=string.ascii_uppercase + string.digits):
+DONT_USE = ['create']
 
+
+def random_string_generator(size=10,chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
+def unique_slug_generator(instance,new_slug=None):
+    if new_slug is not None:
+        slug = new_slug
+    else:
+        slug = slugify(instance.title)
+    if slug in DONT_USE:
+        new_slug = "{slug}-{randstr}".format(
+            slug=slug,
+            randstr = random_string_generator(size=4)
 
-def create_shortcode(instance,size=7):
-    #save the code
-    new_code = shortcode_generator(size=size)
-
-    #make sure the code doesnt exist
-
-    Klass = instance.__class__ #get the instance class
-    qs_exists = Klass.objects.filter(shortcode=new_code).exists()
+        )
+        return unique_slug_generator(instance,new_slug=new_slug)
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(slug=slug).exists()
     if qs_exists:
-        return shortcode_generator(size=size)
-    
-    return new_code
+        new_slug = "{slug}-{randstr}".format(
+            slug=slug,
+            randstr = random_string_generator(size=4)
+
+        )
+        return unique_slug_generator(instance,new_slug=new_slug)
+    return slug
