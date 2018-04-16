@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import List,Item
+from .models import List,Todo
 
 
 
 admin.site.register(List)
 
 
-admin.site.register(Item)
+admin.site.register(Todo)
