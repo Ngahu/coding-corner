@@ -26,6 +26,7 @@ class TodoAPIRootView(APIView):
         return Response({
             "todocategory-create":reverse("todo:todo_createview",request=request,format=format),
             "todocategory-list":reverse("todo:todocategory-listview",request=request,format=format),
+             "todo-list":reverse("todo:todolist_view",request=request,format=format),
         })
 
 
@@ -78,3 +79,14 @@ class TodoCategoryCreateAPIVIew(APIView):
             serializer_class.save(owner=self.request.user)
 
             return Response(serializer_class.data,status=status.HTTP_201_CREATED)
+
+
+
+
+class TodoListAPIView(APIView):
+
+    def get(self,request,format=None):
+        owner =self.request.user
+        qs = Todo.objects.filter(owner=owner)
+        serializer_class = TodoListSerialzer(qs,many=True)
+        return Response(serializer_class.data,status=status.HTTP_200_OK)
