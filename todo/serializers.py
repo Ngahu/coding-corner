@@ -28,3 +28,5 @@ class TodoCategoryCreateSerializer(ModelSerializer):
     #     Create and return a new `Snippet` instance, given the validated data.
     #     """
     #     return TodoCategory.objects.create(**validated_data)
+
+
